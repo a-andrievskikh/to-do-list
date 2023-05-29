@@ -1,37 +1,70 @@
-import React from 'react'
+import React, { useState } from 'react'
+// import { ButtonType } from './App'
 
-type ToDoListPropsType = {
-  truck: string
-  truck2?: number
-  truck3?: boolean
-  tasks: TaskType[]
-}
+type ButtonType = 'All' | 'Active' | 'Completed'
 
 type TaskType = {
   id: number
   title: string
   isDone: boolean
 }
-export const TodoList = (props: ToDoListPropsType) => {
+
+type TodoListPropsType = {
+  title: string
+  tasks: TaskType[]
+  removeTask: (taskId: number) => void
+  // filterTask: (buttonValue: ButtonType) => void
+}
+
+export const TodoList = (props: TodoListPropsType) => {
+
+  const [filterButton, setButton] = useState<ButtonType>('All')
+
+  const filterTask = (buttonValue: ButtonType) => {
+    setButton(buttonValue)
+  }
+
+  const filterTasksArr = () => {
+    let filteredTasks = props.tasks
+
+    return filterButton === 'Active' ? props.tasks.filter(item => !item.isDone)
+      : filterButton === 'Completed' ? props.tasks.filter(item => item.isDone)
+        : filteredTasks
+
+    //
+    // if (filterButton === 'Active') {
+    //   filteredTasks = props.tasks.filter(item => !item.isDone)
+    //   return filteredTasks
+    // }
+    // if (filterButton === 'Completed') {
+    //   filteredTasks = props.tasks.filter(item => item.isDone)
+    //   return filteredTasks
+    // }
+    // return filteredTasks
+  }
+
   return (
     <div>
-      <h3>{props.truck}</h3>
-      <h3>{props.truck2}</h3>
+      <h3>{props.title}</h3>
       <div>
         <input />
-        <button>+</button>
       </div>
       <ul>
-        {props.tasks.map(item => {
+        {filterTasksArr().map(task => {
           return (
-            <li><input type="checkbox" checked={item.isDone} /><span>{item.title}</span></li>
+            <li key={task.id}>
+              <input type="checkbox" checked={task.isDone} />
+              <span>{task.title}</span>
+              <button onClick={() => props.removeTask(task.id)}>X</button>
+            </li>
           )
-        })}
+        })
+        }
       </ul>
       <div>
-        <button>All</button>
-        <button>Active</button>
-        <button>Completed</button>
+        <button onClick={() => {filterTask('All')}}>All</button>
+        <button onClick={() => {filterTask('Active')}}>Active</button>
+        <button onClick={() => {filterTask('Completed')}}>Completed</button>
       </div>
     </div>
   )

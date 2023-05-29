@@ -1,27 +1,69 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import { TodoList } from './TodoList'
 
+export type ButtonType = 'All' | 'Active' | 'Completed'
+
 export const App = () => {
 
-  const truck = `What to learn 1`
-  const truck2 = `What to learn 2`
+  const title = `What to learn`
 
-  const tasks1 = [
-    {id: 1, title: 'HTML&CSS', isDone: true},
-    {id: 2, title: 'JS', isDone: true},
-    {id: 3, title: 'ReactJS', isDone: false},
-  ]
-  const tasks2 = [
-    {id: 1, title: 'Hello world', isDone: true},
-    {id: 2, title: 'I am Happy', isDone: false},
-    {id: 3, title: 'Yo', isDone: false},
-  ]
+  /*let tasks = [
+    { id: 1, title: 'HTML&CSS', isDone: true },
+    { id: 2, title: 'JS', isDone: true },
+    { id: 3, title: 'ReactJS', isDone: false },
+  ]*/
+
+  let [tasks, setTasks] = useState([
+    { id: 1, title: 'HTML&CSS', isDone: true },
+    { id: 2, title: 'JS', isDone: true },
+    { id: 3, title: 'ReactJS', isDone: false },
+  ])
+
+  const removeTask = (taskId: number) => {
+    setTasks(tasks.filter(item => item.id !== taskId))
+  }
+
+  /*const [filterButton, setButton] = useState<ButtonType>('All')
+  const filterTask = (buttonValue: ButtonType) => {
+    setButton(buttonValue)
+  }
+
+  const filterTasksArr = () => {
+    let filteredTasks = tasks
+
+    return filterButton === 'Active' ? tasks.filter(item => !item.isDone)
+      : filterButton === 'Completed' ? tasks.filter(item => item.isDone)
+        : filteredTasks
+
+    /!*
+        if (filterButton === 'Active') {
+          filteredTasks = props.tasks.filter(item => !item.isDone)
+          return filteredTasks
+        }
+        if (filterButton === 'Completed') {
+          filteredTasks = props.tasks.filter(item => item.isDone)
+          return filteredTasks
+        }
+        return filteredTasks*!/
+  }*/
+
+  /*let filteredTasks = tasks
+  if (filterButton === 'Active') {
+    filteredTasks = tasks.filter(item => !item.isDone)
+  }
+  if (filterButton === 'Completed') {
+    filteredTasks = tasks.filter(item => item.isDone)
+  }*/
 
   return (
-    <div className="App">
-      <TodoList truck={truck} truck2={10200} tasks={tasks1} />
-      <TodoList truck={truck2} truck3={true} tasks={tasks2} />
+    <div className="App" style={{ backgroundColor: 'darkcyan' }}>
+      <TodoList
+        title={title}
+        tasks={tasks}
+        removeTask={removeTask}
+        // filterTask={filterTask}
+      />
     </div>
   )
 }

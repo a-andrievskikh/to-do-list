@@ -1,11 +1,10 @@
 import React from 'react'
 
-
 type ToDoListPropsType = {
   truck: string
   truck2?: number
   truck3?: boolean
-  tasks: TaskType[] // В ПРОДАКШЕНЕ ПИШУТ ТАК, НЕ Array<object>
+  tasks: TaskType[]
 }
 
 type TaskType = {

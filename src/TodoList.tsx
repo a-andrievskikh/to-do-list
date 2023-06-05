@@ -1,70 +1,79 @@
-import React, { useState } from 'react'
-// import { ButtonType } from './App'
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react'
+import { FilterValuesType } from './App'
+import { Button } from './componets/Button'
 
-type ButtonType = 'All' | 'Active' | 'Completed'
-
-type TaskType = {
-  id: number
+export type TaskType = {
+  id: string
   title: string
   isDone: boolean
 }
 
-type TodoListPropsType = {
+type PropsType = {
   title: string
   tasks: TaskType[]
-  removeTask: (taskId: number) => void
-  // filterTask: (buttonValue: ButtonType) => void
+  removeTask: (taskId: string) => void
+  changeFilter: (value: FilterValuesType) => void
+  addTask: (newTitle: string) => void
 }
 
-export const TodoList = (props: TodoListPropsType) => {
+export const Todolist = (props: PropsType) => {
+  const [newTitle, setNewTitle] = useState<string>('')
 
-  const [filterButton, setButton] = useState<ButtonType>('All')
-
-  const filterTask = (buttonValue: ButtonType) => {
-    setButton(buttonValue)
+  const mainFuncHandler = (value: FilterValuesType) => {
+    props.changeFilter(value)
   }
 
-  const filterTasksArr = () => {
-    let filteredTasks = props.tasks
+  const removeTaskHandler = (taskId: string) => props.removeTask(taskId)
+  const addTaskHandler = () => {
+    props.addTask(newTitle)
+    setNewTitle('')
+  }
 
-    return filterButton === 'Active' ? props.tasks.filter(item => !item.isDone)
-      : filterButton === 'Completed' ? props.tasks.filter(item => item.isDone)
-        : filteredTasks
-
-    //
-    // if (filterButton === 'Active') {
-    //   filteredTasks = props.tasks.filter(item => !item.isDone)
-    //   return filteredTasks
-    // }
-    // if (filterButton === 'Completed') {
-    //   filteredTasks = props.tasks.filter(item => item.isDone)
-    //   return filteredTasks
-    // }
-    // return filteredTasks
+  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      props.addTask(newTitle)
+      setNewTitle('')
+    }
+  }
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewTitle(e.currentTarget.value)
   }
 
   return (
     <div>
       <h3>{props.title}</h3>
       <div>
-        <input />
+        <input value={newTitle}
+               onKeyDown={onKeyDownHandler}
+               onChange={onChangeHandler}
+        />
+        <button onClick={addTaskHandler}>+</button>
       </div>
       <ul>
-        {filterTasksArr().map(task => {
-          return (
-            <li key={task.id}>
-              <input type="checkbox" checked={task.isDone} />
-              <span>{task.title}</span>
-              <button onClick={() => props.removeTask(task.id)}>X</button>
-            </li>
+        {
+          props.tasks.map(t => {
+
+              return (
+                <li key={t.id}>
+                  <input type="checkbox" checked={t.isDone} />
+                  <span>{t.title}</span>
+                  {/*<button onClick={() => { props.removeTask(t.id) }}>x</button>*/}
+                  <Button name={'x'} callBack={() => removeTaskHandler(t.id)} />
+                </li>
+              )
+            },
           )
-        })
         }
       </ul>
       <div>
-        <button onClick={() => {filterTask('All')}}>All</button>
-        <button onClick={() => {filterTask('Active')}}>Active</button>
-        <button onClick={() => {filterTask('Completed')}}>Completed</button>
+        <Button name={'all'} callBack={() => mainFuncHandler('all')} />
+        <Button name={'active'} callBack={() => mainFuncHandler('active')} />
+        <Button name={'completed'} callBack={() => mainFuncHandler('completed')} />
+        {/*<button onClick={() => { props.changeFilter('all') }}>All</button>*/}
+        {/*<button onClick={onChangeFilterAllHandler}>All</button>*/}
+        {/*<button onClick={() => mainFuncHandler('all')}>All</button>*/}
+        {/*<button onClick={() => mainFuncHandler('active')}>Active</button>*/}
+        {/*<button onClick={() => mainFuncHandler('completed')}>Completed</button>*/}
       </div>
     </div>
   )

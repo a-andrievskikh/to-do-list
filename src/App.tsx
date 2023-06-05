@@ -1,70 +1,54 @@
 import React, { useState } from 'react'
 import './App.css'
-import { TodoList } from './TodoList'
+import { TaskType, Todolist } from './Todolist'
+import { v1 } from 'uuid'
 
-export type ButtonType = 'All' | 'Active' | 'Completed'
+export type FilterValuesType = 'all' | 'active' | 'completed';
 
 export const App = () => {
 
-  const title = `What to learn`
-
-  /*let tasks = [
-    { id: 1, title: 'HTML&CSS', isDone: true },
-    { id: 2, title: 'JS', isDone: true },
-    { id: 3, title: 'ReactJS', isDone: false },
-  ]*/
-
   let [tasks, setTasks] = useState([
-    { id: 1, title: 'HTML&CSS', isDone: true },
-    { id: 2, title: 'JS', isDone: true },
-    { id: 3, title: 'ReactJS', isDone: false },
+    { id: v1(), title: 'HTML&CSS', isDone: true },
+    { id: v1(), title: 'JS', isDone: true },
+    { id: v1(), title: 'ReactJS', isDone: false },
+    { id: v1(), title: 'Rest API', isDone: false },
+    { id: v1(), title: 'GraphQL', isDone: false },
   ])
 
-  const removeTask = (taskId: number) => {
-    setTasks(tasks.filter(item => item.id !== taskId))
+  const addTask = (newTitle: string) => {
+    const newTask: TaskType = { id: v1(), title: newTitle, isDone: false }
+    setTasks([newTask, ...tasks])
+    console.log(newTitle)
   }
 
-  /*const [filterButton, setButton] = useState<ButtonType>('All')
-  const filterTask = (buttonValue: ButtonType) => {
-    setButton(buttonValue)
+  const removeTask = (id: string) => {
+    let filteredTasks = tasks.filter(t => t.id !== id)
+    setTasks(filteredTasks)
   }
 
-  const filterTasksArr = () => {
-    let filteredTasks = tasks
+  let [filter, setFilter] = useState<FilterValuesType>('all')
 
-    return filterButton === 'Active' ? tasks.filter(item => !item.isDone)
-      : filterButton === 'Completed' ? tasks.filter(item => item.isDone)
-        : filteredTasks
+  let tasksForTodolist = tasks
 
-    /!*
-        if (filterButton === 'Active') {
-          filteredTasks = props.tasks.filter(item => !item.isDone)
-          return filteredTasks
-        }
-        if (filterButton === 'Completed') {
-          filteredTasks = props.tasks.filter(item => item.isDone)
-          return filteredTasks
-        }
-        return filteredTasks*!/
-  }*/
-
-  /*let filteredTasks = tasks
-  if (filterButton === 'Active') {
-    filteredTasks = tasks.filter(item => !item.isDone)
+  if (filter === 'active') {
+    tasksForTodolist = tasks.filter(t => !t.isDone)
   }
-  if (filterButton === 'Completed') {
-    filteredTasks = tasks.filter(item => item.isDone)
-  }*/
+  if (filter === 'completed') {
+    tasksForTodolist = tasks.filter(t => !t.isDone)
+  }
+
+  const changeFilter = (value: FilterValuesType) => {
+    setFilter(value)
+  }
 
   return (
-    <div className="App" style={{ backgroundColor: 'darkcyan' }}>
-      <TodoList
-        title={title}
-        tasks={tasks}
-        removeTask={removeTask}
-        // filterTask={filterTask}
+    <div className="App">
+      <Todolist title="What to learn"
+                tasks={tasksForTodolist}
+                removeTask={removeTask}
+                changeFilter={changeFilter}
+                addTask={addTask}
       />
     </div>
   )
 }
-

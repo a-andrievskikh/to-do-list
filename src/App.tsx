@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import './App.css'
-import { TaskType, Todolist } from './Todolist'
+import { Todolist } from './Todolist'
 import { v1 } from 'uuid'
 
+export type TaskType = {
+  id: string
+  title: string
+  isDone: boolean
+}
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
 export const App = () => {
-
-  let [tasks, setTasks] = useState([
+  const [tasks, setTasks] = useState<TaskType[]>([
     { id: v1(), title: 'HTML&CSS', isDone: true },
     { id: v1(), title: 'JS', isDone: true },
     { id: v1(), title: 'ReactJS', isDone: false },
@@ -15,31 +19,22 @@ export const App = () => {
     { id: v1(), title: 'GraphQL', isDone: false },
   ])
 
-  const addTask = (newTitle: string) => {
-    const newTask: TaskType = { id: v1(), title: newTitle, isDone: false }
-    setTasks([newTask, ...tasks])
-    console.log(newTitle)
+  const changeIsDone = (newId: string, newIsDone: boolean) => {
+    setTasks(tasks.map(item => item.id === newId ? { ...item, isDone: newIsDone } : item))
   }
 
-  const removeTask = (id: string) => {
-    let filteredTasks = tasks.filter(t => t.id !== id)
-    setTasks(filteredTasks)
-  }
+  const removeTask = (id: string) => setTasks(tasks.filter(t => t.id != id))
+  const addTask = (title: string) => setTasks([{ id: v1(), title: title, isDone: false }, ...tasks])
 
-  let [filter, setFilter] = useState<FilterValuesType>('all')
+  const [filter, setFilter] = useState<FilterValuesType>('all')
 
-  let tasksForTodolist = tasks
+  const tasksForTodolist =
+    filter === 'active' ? tasks.filter(t => !t.isDone)
+      : filter === 'completed' ? tasks.filter(t => t.isDone)
+        : tasks
 
-  if (filter === 'active') {
-    tasksForTodolist = tasks.filter(t => !t.isDone)
-  }
-  if (filter === 'completed') {
-    tasksForTodolist = tasks.filter(t => !t.isDone)
-  }
+  const changeFilter = (value: FilterValuesType) => setFilter(value)
 
-  const changeFilter = (value: FilterValuesType) => {
-    setFilter(value)
-  }
 
   return (
     <div className="App">
@@ -48,6 +43,7 @@ export const App = () => {
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                changeIsDone={changeIsDone}
       />
     </div>
   )

@@ -62,14 +62,14 @@ export const App = (): JSX.Element => {
     setTasks({ ...tasks, [todoListId]: tasks[todoListId].filter((t) => t.id !== taskId) }) /// короткий вариант
   }
   const addTask = (title: string, todoListId: string) => {
-    const tasksForTodoList: TaskType[] = tasks[todoListId]
-    const newTask: TaskType = { id: v1(), title: title, isDone: false }
-    const updatedTasks = [newTask, ...tasksForTodoList]
-    const copyTasks: TasksStateType = { ...tasks }
-    copyTasks[todoListId] = updatedTasks
-    setTasks(copyTasks)
+    // const tasksForTodoList: TaskType[] = tasks[todoListId]
+    // const newTask: TaskType = { id: v1(), title: title, isDone: false }
+    // const updatedTasks = [newTask, ...tasksForTodoList]
+    // const copyTasks: TasksStateType = { ...tasks }
+    // copyTasks[todoListId] = updatedTasks
+    // setTasks(copyTasks)
 
-    // setTasks({ ...tasks, [todoListId]: [newTask, ...tasks[todoListId]] }) /// короткий вариант
+    setTasks({ ...tasks, [todoListId]: [{ id: v1(), title: title, isDone: false }, ...tasks[todoListId]] }) /// короткий вариант
   }
   const changeTaskStatus = (taskId: string, newIsDoneValue: boolean, todoListId: string) => {
     const tasksForTodoList: TaskType[] = tasks[todoListId]

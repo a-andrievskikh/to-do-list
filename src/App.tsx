@@ -53,13 +53,13 @@ export const App = (): JSX.Element => {
     setTodoLists(updatedTodoLists)
   }
   const removeTask = (taskId: string, todoListId: string) => {
-    const tasksForTodoList: TaskType[] = tasks[todoListId]
+    /*const tasksForTodoList: TaskType[] = tasks[todoListId]
     const updatedTasks = tasksForTodoList.filter((t) => t.id !== taskId)
     const copyTasks: TasksStateType = { ...tasks }
     copyTasks[todoListId] = updatedTasks
-    setTasks(copyTasks)
+    setTasks(copyTasks)*/
 
-    // setTasks( {...tasks, tasksForTodoList.filter((t) => t.id !== taskId)}) /// короткий вариант
+    setTasks({ ...tasks, [todoListId]: tasks[todoListId].filter((t) => t.id !== taskId) }) /// короткий вариант
   }
   const addTask = (title: string, todoListId: string) => {
     const tasksForTodoList: TaskType[] = tasks[todoListId]

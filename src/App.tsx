@@ -72,22 +72,21 @@ export const App = (): JSX.Element => {
     setTasks({ ...tasks, [todoListId]: [{ id: v1(), title: title, isDone: false }, ...tasks[todoListId]] }) /// короткий вариант
   }
   const changeTaskStatus = (taskId: string, newIsDoneValue: boolean, todoListId: string) => {
-    const tasksForTodoList: TaskType[] = tasks[todoListId]
+    /*const tasksForTodoList: TaskType[] = tasks[todoListId]
     const updatedTasks
       = tasksForTodoList.map(t => ( t.id === taskId ? { ...t, isDone: newIsDoneValue } : t ),
     )
     const copyTasks: TasksStateType = { ...tasks }
     copyTasks[todoListId] = updatedTasks
-    setTasks(copyTasks)
+    setTasks(copyTasks)*/
 
-
-    /*setTasks({
+    setTasks({
         ...tasks,
         [todoListId]: tasks[todoListId].map(t => (
           t.id === taskId ? { ...t, isDone: newIsDoneValue } : t ), /// короткая запись...
         ),
       },
-    )*/
+    )
   }
   const removeTodoList = (todoListId: string) => {
     const updateTodoLists: TodoListType[] = todoLists.filter(tl => tl.id !== todoListId)

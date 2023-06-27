@@ -54,3 +54,11 @@
   border: 2px solid red;
   outline: none;
 }
+
+.add-form {
+  height: 100%;
+  border: 1px solid black;
+  border-radius: 3px;
+  background-color: #257b96;
+  padding: 20px;
+}

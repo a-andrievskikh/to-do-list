@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './App.css'
 import { TodoList } from './TodoList'
 import { v1 } from 'uuid'
+import { AddItemForm } from './AddItemForm'
 
 export type TaskType = {
   id: string
@@ -9,20 +10,17 @@ export type TaskType = {
   isDone: boolean
 }
 export type FilterValuesType = 'All' | 'Active' | 'Completed'
-
 type TodoListType = {
   id: string
   title: string
   filter: FilterValuesType
 }
-
 type TasksStateType = {
   [todoListId: string]: TaskType[]
 }
 
 export const App = (): JSX.Element => {
   // BLL
-
   const todoListId_1 = v1()
   const todoListId_2 = v1()
 
@@ -39,20 +37,12 @@ export const App = (): JSX.Element => {
     ],
     [todoListId_2]: [
       { id: v1(), title: 'Books', isDone: true },
-      { id: v1(), title: 'Toys', isDone: true },
+      { id: v1(), title: 'Toys', isDone: false },
       { id: v1(), title: 'Bikes', isDone: false },
     ],
   })
 
-  const changeTodoListFilter = (nextFilterValue: FilterValuesType, todoListId: string) => {
-    const updatedTodoLists: TodoListType[]
-      = todoLists.map(tl => (
-        tl.id === todoListId ? { ...tl, filter: nextFilterValue } : tl
-      ),
-    )
-    setTodoLists(updatedTodoLists)
-  }
-  const removeTask = (taskId: string, todoListId: string) => {
+  const removeTask = (todoListId: string, taskId: string) => {
     /*const tasksForTodoList: TaskType[] = tasks[todoListId]
     const updatedTasks = tasksForTodoList.filter((t) => t.id !== taskId)
     const copyTasks: TasksStateType = { ...tasks }
@@ -61,7 +51,7 @@ export const App = (): JSX.Element => {
 
     setTasks({ ...tasks, [todoListId]: tasks[todoListId].filter((t) => t.id !== taskId) }) /// короткий вариант
   }
-  const addTask = (title: string, todoListId: string) => {
+  const addTask = (todoListId: string, title: string) => {
     // const tasksForTodoList: TaskType[] = tasks[todoListId]
     // const newTask: TaskType = { id: v1(), title: title, isDone: false }
     // const updatedTasks = [newTask, ...tasksForTodoList]
@@ -71,7 +61,7 @@ export const App = (): JSX.Element => {
 
     setTasks({ ...tasks, [todoListId]: [{ id: v1(), title: title, isDone: false }, ...tasks[todoListId]] }) /// короткий вариант
   }
-  const changeTaskStatus = (taskId: string, newIsDoneValue: boolean, todoListId: string) => {
+  const changeTaskStatus = (todoListId: string, taskId: string, newIsDoneValue: boolean) => {
     /*const tasksForTodoList: TaskType[] = tasks[todoListId]
     const updatedTasks
       = tasksForTodoList.map(t => ( t.id === taskId ? { ...t, isDone: newIsDoneValue } : t ),
@@ -88,13 +78,45 @@ export const App = (): JSX.Element => {
       },
     )
   }
+  const changeTaskTitle = (todoListId: string, taskId: string, title: string) => {
+    setTasks({
+        ...tasks,
+        [todoListId]: tasks[todoListId].map(t => (
+          t.id === taskId ? { ...t, title } : t ), /// короткая запись...
+        ),
+      },
+    )
+  }
+
   const removeTodoList = (todoListId: string) => {
     const updateTodoLists: TodoListType[] = todoLists.filter(tl => tl.id !== todoListId)
     setTodoLists(updateTodoLists)
     delete tasks[todoListId]
   }
+  const changeTodoListFilter = (todoListId: string, nextFilterValue: FilterValuesType) => {
+    const updatedTodoLists: TodoListType[]
+      = todoLists.map(tl => (
+        tl.id === todoListId ? { ...tl, filter: nextFilterValue } : tl
+      ),
+    )
+    setTodoLists(updatedTodoLists)
+  }
+  const addTodoList = (title: string) => {
+    const newTodoID = v1()
+    setTodoLists([...todoLists, { id: newTodoID, title: title, filter: 'All' }])
+    setTasks({ ...tasks, [newTodoID]: [] })
+  }
+  const changeTodoListTitle = (todoListId: string, title: string) => {
+    const updatedTodoLists: TodoListType[]
+      = todoLists.map(tl => (
+        tl.id === todoListId ? { ...tl, title } : tl
+      ),
+    )
+    setTodoLists(updatedTodoLists)
+  }
 
   // UI
+  const maxTodoListTitleLength = 15
   const getFilteredTasks = (allTasks: TaskType[], currentFilterValue: FilterValuesType): TaskType[] => {
     return currentFilterValue === 'Active' ? allTasks.filter(t => !t.isDone)
       : currentFilterValue === 'Completed' ? allTasks.filter(t => t.isDone)
@@ -121,12 +143,17 @@ export const App = (): JSX.Element => {
                 removeTodoList={removeTodoList}
                 changeFilter={changeTodoListFilter}
                 changeTaskStatus={changeTaskStatus}
+                changeTaskTitle={changeTaskTitle}
+                changeTodoListTitle={changeTodoListTitle}
       />
     )
   })
 
   return (
     <div className="App">
+      <div className={'add-form'}>
+        <AddItemForm maxItemTitleLength={maxTodoListTitleLength} addItem={addTodoList} />
+      </div>
       {todoListsComponents}
     </div>
   )

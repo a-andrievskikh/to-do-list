@@ -6,3 +6,20 @@
 .App > div {
   margin-right: 50px;
 }
+
+.error {
+  outline: none;
+  border: red 3px solid;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.isActive {
+  background-color: aquamarine;
+}
+
+.isDone {
+  opacity: .5;
+}

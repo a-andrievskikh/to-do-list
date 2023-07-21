@@ -1,4 +1,6 @@
 import React, { ChangeEvent, FC, KeyboardEvent, useState } from 'react'
+import { IconButton, TextField } from '@mui/material'
+import { AddBoxOutlined } from '@mui/icons-material'
 
 export type ItemFormType = {
   addItem: (title: string) => void
@@ -30,14 +32,26 @@ export const ItemForm: FC<ItemFormType> = (props) => {
 
   return (
     <div>
-      <input className={error ? 'error' : ''}
-             value={taskTitle}
-             onChange={onChangeHandler}
-             onKeyDown={onKeyDownHandler}
-             placeholder={'Введи название'}
+      <TextField variant={'outlined'}
+                 label={'Введите название'}
+                 helperText={error ? 'Title is required!' : ''}
+                 size={'small'}
+                 error={error}
+                 value={taskTitle}
+                 onChange={onChangeHandler}
+                 onKeyDown={onKeyDownHandler}
       />
-      <button onClick={addItem}>+</button>
-      <div className={'errorMessage'}>{error && 'Title is required!'}</div>
+      <IconButton
+        onClick={addItem}
+      >
+        <AddBoxOutlined style={{
+          width: '30px',
+          height: '30px',
+          minWidth: '30px',
+          minHeight: '30px',
+        }}
+                        fontSize={'small'} />
+      </IconButton>
     </div>
   )
 }

@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import './App.css'
 import { Todolist } from './components/Todolist/Todolist'
 import { v1 } from 'uuid'
-import { ItemForm } from './components/Todolist/ItemForm'
+import { ItemForm } from './components/ItemForm/ItemForm'
+import { Header } from './components/Header/Header'
+import { Container, Grid, Paper } from '@mui/material'
 
 export type TaskType = {
   id: string
@@ -101,31 +103,43 @@ export const App = () => {
 
   return (
     <div className="App">
-      <ItemForm addItem={addTodolist} />
-      {
-        todolists.map(tl => {
-          const tasksForTodolist: TaskType[] =
-            tl.filter === 'active' ? tasks[tl.id].filter(t => !t.isDone)
-              : tl.filter === 'completed' ? tasks[tl.id].filter(t => t.isDone)
-                : tasks[tl.id]
+      <Header />
+      <Container fixed>
+        <Grid container style={{ padding: '10px' }}>
+          <ItemForm addItem={addTodolist} />
+        </Grid>
+        <Grid container spacing={3}>
+          {
+            todolists.map(tl => {
+              const tasksForTodolist: TaskType[] =
+                tl.filter === 'active' ? tasks[tl.id].filter(t => !t.isDone)
+                  : tl.filter === 'completed' ? tasks[tl.id].filter(t => t.isDone)
+                    : tasks[tl.id]
 
-          return (
-            <Todolist key={tl.id}
-                      id={tl.id}
-                      title={tl.title}
-                      tasks={tasksForTodolist}
-                      removeTask={removeTask}
-                      addTask={addTask}
-                      changeFilter={changeFilter}
-                      changeTaskStatus={changeTaskStatus}
-                      filter={tl.filter}
-                      removeTodolist={removeTodolist}
-                      changeTaskTitle={changeTaskTitle}
-                      changeTodolistTitle={changeTodolistTitle}
-            />
-          )
-        })
-      }
+              return (
+                <Grid item>
+                  <Paper elevation={3} style={{ padding: '10px' }}>
+                    <Todolist key={tl.id}
+                              id={tl.id}
+                              title={tl.title}
+                              tasks={tasksForTodolist}
+                              removeTask={removeTask}
+                              addTask={addTask}
+                              changeFilter={changeFilter}
+                              changeTaskStatus={changeTaskStatus}
+                              filter={tl.filter}
+                              removeTodolist={removeTodolist}
+                              changeTaskTitle={changeTaskTitle}
+                              changeTodolistTitle={changeTodolistTitle}
+                    />
+                  </Paper>
+                </Grid>
+
+              )
+            })
+          }
+        </Grid>
+      </Container>
     </div>
   )
 }

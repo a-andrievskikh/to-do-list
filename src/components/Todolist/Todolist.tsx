@@ -5,7 +5,7 @@ import { EditableSpan } from '../EditableSpan/EditableSpan'
 import { Button, Checkbox, IconButton } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 
-export type TodolistType = {
+export type TodolistPropsType = {
   id: string
   title: string
   filter: FilterType
@@ -19,7 +19,7 @@ export type TodolistType = {
   changeTodolistTitle: (todolistID: string, newTitle: string) => void
 }
 
-export const Todolist: FC<TodolistType> = (props) => {
+export const Todolist: FC<TodolistPropsType> = (props) => {
   const addTask = (title: string) => {
     props.addTask(props.id, title)
   }

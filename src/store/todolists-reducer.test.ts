@@ -12,7 +12,6 @@ let todolistID1: string
 let todolistID2: string
 let startState: TodolistType[]
 
-
 beforeEach(() => {
   todolistID1 = v1()
   todolistID2 = v1()

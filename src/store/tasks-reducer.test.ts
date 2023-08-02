@@ -1,4 +1,4 @@
-import { TasksStateType } from '../App'
+import { TasksStateType } from '../AppWithRedux'
 import {
   addTaskAC,
   changeTaskStatusAC,
@@ -33,7 +33,7 @@ beforeEach(() => {
 
 
 test('correct task should be removed', () => {
-  const action = removeTaskAC('2', todolistID2)
+  const action = removeTaskAC(todolistID2, '2')
   const endState = tasksReducer(startState, action)
 
   expect(endState[todolistID1].length).toBe(3)
@@ -54,7 +54,7 @@ test('correct task should be removed', () => {
 })
 
 test('correct task should be added to correct array', () => {
-  const action = addTaskAC('juice', todolistID2)
+  const action = addTaskAC(todolistID2, 'juice')
   const endState = tasksReducer(startState, action)
 
   expect(endState[todolistID1].length).toBe(3)
@@ -65,7 +65,7 @@ test('correct task should be added to correct array', () => {
 })
 
 test('status of specified task should be changed', () => {
-  const action = changeTaskStatusAC('2', false, todolistID2)
+  const action = changeTaskStatusAC(todolistID2, '2', false)
   const endState = tasksReducer(startState, action)
 
   expect(endState[todolistID1][1].isDone).toBeTruthy()
@@ -73,7 +73,7 @@ test('status of specified task should be changed', () => {
 })
 
 test('title of specified task should be changed', () => {
-  const action = changeTaskTitleAC('2', 'apple', todolistID2)
+  const action = changeTaskTitleAC(todolistID2, '2', 'apple')
   const endState = tasksReducer(startState, action)
 
   expect(endState[todolistID1][1].title).toBe('JS')

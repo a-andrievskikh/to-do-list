@@ -1,37 +1,42 @@
-import React, { ChangeEvent, FC, useState } from 'react'
+import React from 'react'
 import { TextField } from '@mui/material'
 
 export type EditableSpan = {
   value: string
-  onChange: (newValue: string) => void
+  onChangeTitle: (newValue: string) => void
 }
 
-export const EditableSpan: FC<EditableSpan> = (props) => {
-  const [editMode, setEditMode] = useState<boolean>(false)
-  const [title, setTitle] = useState<string>('')
+export const EditableSpan: React.FC<EditableSpan> = React.memo((
+    {
+      value,
+      onChangeTitle,
+    }) => {
+    console.log('EditableSpan rendered')
+    const [editMode, setEditMode] = React.useState<boolean>(false)
+    const [title, setTitle] = React.useState<string>('')
 
+    const activateViewMode = React.useCallback(() => {
+      setEditMode(false)
+      onChangeTitle(title)
+    }, [title])
 
-  const activateViewMode = () => {
-    setEditMode(false)
-    props.onChange(title)
-  }
+    const activateEditMode = () => {
+      setEditMode(true)
+      setTitle(value)
+    }
 
-  const activateEditMode = () => {
-    setEditMode(true)
-    setTitle(props.value)
-  }
+    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
 
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
-
-  return (
-    editMode
-      ? <TextField value={title}
-                   variant={'outlined'}
-                   size={'small'}
-                   onChange={onChangeHandler}
-                   onBlur={activateViewMode}
-                   autoFocus
-      />
-      : <span onDoubleClick={activateEditMode}>{props.value}</span>
-  )
-}
+    return (
+      editMode
+        ? <TextField value={title}
+                     variant={'outlined'}
+                     size={'small'}
+                     onChange={onChangeHandler}
+                     onBlur={activateViewMode}
+                     autoFocus
+        />
+        : <span onDoubleClick={activateEditMode}>{value}</span>
+    )
+  },
+)

@@ -1,4 +1,4 @@
-type StateType = {
+export type StateType = {
   age: number
   childrenCount: number
   name: string
@@ -27,7 +27,7 @@ export const userReducer = (state: StateType, action: ActionType): StateType => 
         name: action.newName,
       }
     default:
-      throw new Error(`I don't understand this action type!`)
+      return state
   }
 }
 

@@ -6,9 +6,6 @@ import { Header } from './components/Header/Header'
 import { Container, Grid, Paper } from '@mui/material'
 import {
   addTodolistAC,
-  changeTodolistFilterAC,
-  changeTodolistTitleAC,
-  removeTodolistAC,
 } from './store/todolists-reducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from './store/store'
@@ -18,17 +15,14 @@ export type TaskType = {
   title: string
   isDone: boolean
 }
-
 export type TodolistType = {
   id: string
   title: string
   filter: FilterType
 }
-
 export type TasksStateType = {
   [key: string]: TaskType[]
 }
-
 export type FilterType = 'all' | 'active' | 'completed'
 
 export const AppWithRedux = () => {
@@ -36,19 +30,22 @@ export const AppWithRedux = () => {
 
   const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
 
-  const removeTodolist = (todolistID: string) => {
-    dispatch(removeTodolistAC(todolistID))
-  }
-
-  const addTodolist = (todolistTitle: string) => {
+  const addTodolist = React.useCallback((todolistTitle: string) => {
     dispatch(addTodolistAC(todolistTitle))
-  }
+  }, [dispatch])
 
-  const changeTodolistTitle = (todolistID: string, newTitle: string) =>
-    dispatch(changeTodolistTitleAC(todolistID, newTitle))
-
-  const changeFilter = (todolistID: string, filterValue: FilterType) =>
-    dispatch(changeTodolistFilterAC(todolistID, filterValue))
+  const todolistList = todolists.map(tl => {
+    return (
+      <Grid item key={tl.id}>
+        <Paper elevation={3} style={{ padding: '10px' }}>
+          <Todolist id={tl.id}
+                    title={tl.title}
+                    filter={tl.filter}
+          />
+        </Paper>
+      </Grid>
+    )
+  })
 
   return (
     <div className="App">
@@ -58,23 +55,7 @@ export const AppWithRedux = () => {
           <ItemForm addItem={addTodolist} />
         </Grid>
         <Grid container spacing={3}>
-          {
-            todolists.map(tl => {
-              return (
-                <Grid item key={tl.id}>
-                  <Paper elevation={3} style={{ padding: '10px' }}>
-                    <Todolist id={tl.id}
-                              title={tl.title}
-                              filter={tl.filter}
-                              changeFilter={changeFilter}
-                              removeTodolist={removeTodolist}
-                              changeTodolistTitle={changeTodolistTitle}
-                    />
-                  </Paper>
-                </Grid>
-              )
-            })
-          }
+          {todolistList}
         </Grid>
       </Container>
     </div>

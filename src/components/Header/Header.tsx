@@ -2,7 +2,7 @@ import React from 'react'
 import { AppBar, Button, IconButton, Typography } from '@mui/material'
 import { Menu } from '@mui/icons-material'
 
-export const Header = () => {
+export const Header = React.memo(() => {
   return (
     <AppBar position="static">
       <IconButton>
@@ -14,4 +14,4 @@ export const Header = () => {
       <Button color={'inherit'}>Login</Button>
     </AppBar>
   )
-}
+})

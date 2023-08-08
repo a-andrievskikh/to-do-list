@@ -1,6 +1,5 @@
 export {}
 /*
-import React, { useReducer } from 'react'
 import './App.css'
 import { Todolist } from './components/Todolist/Todolist'
 import { v1 } from 'uuid'

@@ -1,12 +1,10 @@
-import React from 'react'
+import { useCallback } from 'react'
 import './App.css'
 import { Todolist } from './components/Todolist/Todolist'
 import { ItemForm } from './components/ItemForm/ItemForm'
 import { Header } from './components/Header/Header'
 import { Container, Grid, Paper } from '@mui/material'
-import {
-  addTodolistAC,
-} from './store/todolists-reducer'
+import { addTodolistAC } from './store/todolists-reducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from './store/store'
 
@@ -30,7 +28,7 @@ export const AppWithRedux = () => {
 
   const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
 
-  const addTodolist = React.useCallback((todolistTitle: string) => {
+  const addTodolist = useCallback((todolistTitle: string) => {
     dispatch(addTodolistAC(todolistTitle))
   }, [dispatch])
 

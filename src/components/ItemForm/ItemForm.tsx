@@ -1,16 +1,16 @@
-import React from 'react'
 import { IconButton, TextField } from '@mui/material'
+import { KeyboardEvent, ChangeEvent, memo, useState } from 'react'
 import { AddBoxOutlined } from '@mui/icons-material'
 
 export type ItemFormType = {
   addItem: (title: string) => void
 }
 
-export const ItemForm: React.FC<ItemFormType> = React.memo(({ addItem }) => {
-    const [title, setTitle] = React.useState<string>('')
-    const [isError, setIsError] = React.useState<boolean>(false)
+export const ItemForm = memo(({ addItem }: ItemFormType) => {
+    const [title, setTitle] = useState<string>('')
+    const [isError, setIsError] = useState<boolean>(false)
 
-    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
       setTitle(e.currentTarget.value)
     }
 
@@ -23,7 +23,7 @@ export const ItemForm: React.FC<ItemFormType> = React.memo(({ addItem }) => {
       }
     }
 
-    const onKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
       !title && setIsError(false)
       if (e.key === 'Enter') {
         e.preventDefault()

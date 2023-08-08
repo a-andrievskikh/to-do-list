@@ -1,8 +1,8 @@
-import React from 'react'
+import { memo } from 'react'
 import { AppBar, Button, IconButton, Typography } from '@mui/material'
 import { Menu } from '@mui/icons-material'
 
-export const Header = React.memo(() => {
+export const Header = memo(() => {
   return (
     <AppBar position="static">
       <IconButton>

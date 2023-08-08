@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from '../../store/store'
 import { addTaskAC } from '../../store/tasks-reducer'
@@ -15,12 +15,7 @@ export type TodolistPropsType = {
   filter: FilterType
 }
 
-export const Todolist: React.FC<TodolistPropsType> = React.memo((
-    {
-      id,
-      title,
-      filter,
-    }) => {
+export const Todolist = memo(({ id, title, filter }: TodolistPropsType) => {
 
     const dispatch = useDispatch()
 
@@ -31,19 +26,19 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((
             : state.tasks[id],
       )
 
-    const addItem = React.useCallback((itemTitle: string) => {
+    const addItem = useCallback((itemTitle: string) => {
       dispatch(addTaskAC(id, itemTitle))
     }, [dispatch, id])
 
-    const changeTodolistTitle = React.useCallback((newTitle: string) => {
+    const changeTodolistTitle = useCallback((newTitle: string) => {
       dispatch(changeTodolistTitleAC(id, newTitle))
     }, [dispatch, id])
 
-    const changeFilter = React.useCallback((filterValue: FilterType) => {
+    const changeFilter = useCallback((filterValue: FilterType) => {
       dispatch(changeTodolistFilterAC(id, filterValue))
     }, [dispatch, id])
 
-    const removeTodolist = React.useCallback((todolistID: string) => {
+    const removeTodolist = useCallback((todolistID: string) => {
       dispatch(removeTodolistAC(todolistID))
     }, [dispatch])
 
@@ -67,15 +62,18 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((
         <div>
           <Button variant={filter === 'all' ? 'contained' : 'outlined'}
                   size={'small'}
-                  onClick={() => changeFilter('all')}>All
+                  onClick={() => changeFilter('all')}>
+            All
           </Button>
           <Button variant={filter === 'active' ? 'contained' : 'outlined'}
                   size={'small'}
-                  onClick={() => changeFilter('active')}>Active
+                  onClick={() => changeFilter('active')}>
+            Active
           </Button>
           <Button variant={filter === 'completed' ? 'contained' : 'outlined'}
                   size={'small'}
-                  onClick={() => changeFilter('completed')}>Completed
+                  onClick={() => changeFilter('completed')}>
+            Completed
           </Button>
         </div>
       </div>

@@ -5,7 +5,7 @@ import { EditableSpan } from '../EditableSpan/EditableSpan'
 import { Delete } from '@mui/icons-material'
 import { ChangeEvent, useCallback } from 'react'
 
-type TaskPropsType = {
+export type TaskPropsType = {
   taskID: string
   title: string
   isDone: boolean

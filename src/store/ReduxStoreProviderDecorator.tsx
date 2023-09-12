@@ -5,6 +5,7 @@ import { combineReducers, legacy_createStore } from 'redux'
 import { tasksReducer } from './tasks-reducer'
 import { todolistsReducer } from './todolists-reducer'
 import { v1 } from 'uuid'
+import { TaskStatuses } from '../api/tasks-api'
 
 export const rootReducer = combineReducers({
   tasks: tasksReducer,
@@ -16,17 +17,33 @@ export const todolistID2 = v1()
 
 const initialGlobalState = {
   todolists: [
-    { id: todolistID1, title: 'What to learn', filter: 'all' },
-    { id: todolistID2, title: 'What to buy', filter: 'all' },
+    { id: todolistID1, title: 'What to learn', filter: 'all', addedDate: '', order: 0 },
+    { id: todolistID2, title: 'What to buy', filter: 'all', addedDate: '', order: 0 },
   ],
   tasks: {
     [todolistID1]: [
-      { id: v1(), title: 'HTML & CSS', isDone: true },
-      { id: v1(), title: 'JS', isDone: false },
+      {
+        id: v1(), title: 'HTML & CSS', status: TaskStatuses.Completed,
+        todoListId: todolistID1, description: '', priority: 0, startDate: '',
+        deadline: '', order: 0, addedDate: '',
+      },
+      {
+        id: v1(), title: 'JS', status: TaskStatuses.New,
+        todoListId: todolistID1, description: '', priority: 0,
+        startDate: '', deadline: '', order: 0, addedDate: '',
+      },
     ],
     [todolistID2]: [
-      { id: v1(), title: 'Book', isDone: true },
-      { id: v1(), title: 'Toy', isDone: false },
+      {
+        id: v1(), title: 'Book', status: TaskStatuses.Completed,
+        todoListId: todolistID2, description: '', priority: 0, startDate: '',
+        deadline: '', order: 0, addedDate: '',
+      },
+      {
+        id: v1(), title: 'Toy', status: TaskStatuses.New,
+        todoListId: todolistID2, description: '', priority: 0,
+        startDate: '', deadline: '', order: 0, addedDate: '',
+      },
     ],
   },
 

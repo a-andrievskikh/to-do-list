@@ -4,19 +4,20 @@ import { Checkbox, IconButton } from '@mui/material'
 import { EditableSpan } from '../EditableSpan/EditableSpan'
 import { Delete } from '@mui/icons-material'
 import { ChangeEvent, useCallback } from 'react'
+import { TaskStatuses } from '../../api/tasks-api'
 
 export type TaskPropsType = {
   taskID: string
   title: string
-  isDone: boolean
+  status: TaskStatuses
   todolistID: string
 }
 
-export const Task = ({ taskID, title, isDone, todolistID }: TaskPropsType) => {
+export const Task = ({ taskID, title, status, todolistID }: TaskPropsType) => {
   const dispatch = useDispatch()
 
   const onChangeStatusHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeTaskStatusAC(todolistID, taskID, e.currentTarget.checked))
+    dispatch(changeTaskStatusAC(todolistID, taskID, e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New))
   }, [dispatch, todolistID, taskID])
 
   const onClickHandler = useCallback(() => {
@@ -28,10 +29,10 @@ export const Task = ({ taskID, title, isDone, todolistID }: TaskPropsType) => {
   }, [dispatch, todolistID, taskID])
 
   return (
-    <li className={isDone ? 'isDone' : ''}
+    <li className={status === TaskStatuses.Completed ? 'isDone' : ''}
         key={taskID}>
       <Checkbox color="primary"
-                checked={isDone}
+                checked={status === TaskStatuses.Completed}
                 onChange={onChangeStatusHandler}
       />
       <EditableSpan value={title}

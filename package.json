@@ -33,7 +33,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll",
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 9009",
     "build-storybook": "storybook build",
@@ -60,7 +60,7 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "/node_modules/(?!(axios|react-day-picker)/)"
+      "/node_modules/(?!axios/)"
     ]
   },
   "devDependencies": {

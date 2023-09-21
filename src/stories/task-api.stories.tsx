@@ -112,7 +112,7 @@ export const UpdateTaskTitle = () => {
   const onChangeDeadlineHandler = (e: ChangeEvent<HTMLInputElement>) => setDeadline(e.currentTarget.value)
 
   const onClickHandler = () => {
-    tasksAPI.updateTaskTitle(todolistID, taskID, {
+    tasksAPI.updateTask(todolistID, taskID, {
       title,
       description,
       status,

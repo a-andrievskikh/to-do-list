@@ -73,8 +73,8 @@ export const addTaskTC = (todolistID: string, title: string): AppThunk => async 
 }
 export const updateTaskTC = (todolistID: string, taskID: string, model: UpdateDomainTaskModelType): AppThunk => {
   return async (dispatch, getState: () => AppRootStateType) => {
-    const task = getState().tasks[todolistID].find(t => t.id === taskID)
     try {
+      const task = getState().tasks[todolistID].find(t => t.id === taskID)
       if (task) {
         await tasksAPI.updateTask(todolistID, taskID, {
           title: task.title,
@@ -85,7 +85,7 @@ export const updateTaskTC = (todolistID: string, taskID: string, model: UpdateDo
           description: task.description,
           ...model,
         })
-        updateTaskAC(todolistID, taskID, model)
+        dispatch(updateTaskAC(todolistID, taskID, model))
       }
     } catch (e) {
       throw new Error()

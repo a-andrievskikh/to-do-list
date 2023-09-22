@@ -1,9 +1,5 @@
-import axios from 'axios'
+import { instance } from './basic'
 
-const instance = axios.create({
-  baseURL: 'https://social-network.samuraijs.com/api/1.1/',
-  withCredentials: true,
-})
 // API
 export const tasksAPI = {
   getTasks(todolistID: string) {

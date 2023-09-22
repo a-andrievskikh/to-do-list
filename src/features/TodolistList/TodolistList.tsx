@@ -1,19 +1,18 @@
-import { ThunkType, useAppSelector } from '../../app/store'
-import { useDispatch } from 'react-redux'
 import { useCallback, useEffect } from 'react'
-import { addTodolistTC, getTodolistsTC, TodolistDomainType } from './todolists-reducer'
+import { addTodolistTC, getTodolistsTC } from './todolists-reducer'
 import { Grid, Paper } from '@mui/material'
 import { Todolist } from './Todolist/Todolist'
 import { ItemForm } from '../../components/ItemForm/ItemForm'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 
 export const TodolistList = () => {
-  const dispatch: ThunkType = useDispatch()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(getTodolistsTC())
   }, [dispatch])
 
-  const todolists = useAppSelector<TodolistDomainType[]>(s => s.todolists)
+  const todolists = useAppSelector(s => s.todolists)
 
   const addTodolist = useCallback((todolistTitle: string) => {
     dispatch(addTodolistTC(todolistTitle))

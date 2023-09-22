@@ -4,8 +4,7 @@ import { EditableSpan } from '../../../../components/EditableSpan/EditableSpan'
 import { Delete } from '@mui/icons-material'
 import { ChangeEvent, useCallback } from 'react'
 import { TaskStatuses } from '../../../../api/tasks-api'
-import { ThunkType } from '../../../../app/store'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../../../app/hooks'
 
 export type TaskPropsType = {
   todolistID: string
@@ -15,7 +14,7 @@ export type TaskPropsType = {
 }
 
 export const Task = ({ todolistID, taskID, title, status }: TaskPropsType) => {
-  const dispatch: ThunkType = useDispatch()
+  const dispatch = useAppDispatch()
 
   const removeTask = useCallback(() => {
     dispatch(removeTaskTC(todolistID, taskID))

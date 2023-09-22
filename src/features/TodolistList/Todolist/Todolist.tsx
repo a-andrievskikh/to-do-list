@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect } from 'react'
-import { useAppSelector, ThunkType } from '../../../app/store'
 import { addTaskTC, getTasksTC } from '../tasks-reducer'
 import { EditableSpan } from '../../../components/EditableSpan/EditableSpan'
 import { ItemForm } from '../../../components/ItemForm/ItemForm'
@@ -11,7 +10,7 @@ import {
 } from '../todolists-reducer'
 import { Task } from './Task/Task'
 import { TaskStatuses, TaskType } from '../../../api/tasks-api'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 
 export type TodolistPropsType = {
   id: string
@@ -20,7 +19,7 @@ export type TodolistPropsType = {
 }
 
 export const Todolist = memo(({ id, title, filter }: TodolistPropsType) => {
-    const dispatch: ThunkType = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
       dispatch(getTasksTC(id))

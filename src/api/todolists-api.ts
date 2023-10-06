@@ -28,3 +28,9 @@ type ResponseType<D = {}> = {
   resultCode: number
   messages: string[]
 }
+
+export enum ResultCodes {
+  Success = 0,
+  Failed = 1,
+  Captcha = 10
+}

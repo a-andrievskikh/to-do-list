@@ -1,7 +1,8 @@
-import { updateTaskTC, removeTaskTC } from '../../tasks-reducer'
-import { Checkbox, IconButton } from '@mui/material'
+import Delete from '@mui/icons-material/Delete'
+import Checkbox from '@mui/material/Checkbox'
+import IconButton from '@mui/material/IconButton'
+import { updateTaskTC, deleteTaskTC } from '../../tasks-reducer'
 import { EditableSpan } from '../../../../components/EditableSpan/EditableSpan'
-import { Delete } from '@mui/icons-material'
 import { ChangeEvent, useCallback } from 'react'
 import { TaskStatuses } from '../../../../api/tasks-api'
 import { useAppDispatch } from '../../../../app/hooks'
@@ -16,11 +17,11 @@ export type TaskPropsType = {
 export const Task = ({ todolistID, taskID, title, status }: TaskPropsType) => {
   const dispatch = useAppDispatch()
 
-  const removeTask = useCallback(() => {
-    dispatch(removeTaskTC(todolistID, taskID))
+  const deleteTask = useCallback(() => {
+    dispatch(deleteTaskTC(todolistID, taskID))
   }, [dispatch, todolistID, taskID])
 
-  const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const updateTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     dispatch(
       updateTaskTC(
         todolistID, taskID,
@@ -29,7 +30,7 @@ export const Task = ({ todolistID, taskID, title, status }: TaskPropsType) => {
     )
   }, [dispatch, todolistID, taskID])
 
-  const changeTaskTitle = useCallback((taskTitle: string) => {
+  const updateTaskTitle = useCallback((taskTitle: string) => {
     dispatch(
       updateTaskTC(
         todolistID, taskID, { title: taskTitle },
@@ -42,12 +43,12 @@ export const Task = ({ todolistID, taskID, title, status }: TaskPropsType) => {
         key={taskID}>
       <Checkbox color="primary"
                 checked={status === TaskStatuses.Completed}
-                onChange={changeTaskStatus}
+                onChange={updateTaskStatus}
       />
       <EditableSpan value={title}
-                    onChangeTitle={changeTaskTitle}
+                    onChangeTitle={updateTaskTitle}
       />
-      <IconButton onClick={removeTask}>
+      <IconButton onClick={deleteTask}>
         <Delete fontSize={'small'} />
       </IconButton>
     </li>

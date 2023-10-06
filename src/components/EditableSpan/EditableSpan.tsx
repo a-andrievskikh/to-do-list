@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material'
+import TextField from '@mui/material/TextField'
 import { ChangeEvent, memo, useCallback, useState } from 'react'
 
 export type EditableSpanPropsType = {
@@ -13,7 +13,7 @@ export const EditableSpan = memo(({ value, onChangeTitle }: EditableSpanPropsTyp
     const activateViewMode = useCallback(() => {
       setEditMode(false)
       onChangeTitle(title)
-    }, [title])
+    }, [onChangeTitle, title])
 
     const activateEditMode = () => {
       setEditMode(true)

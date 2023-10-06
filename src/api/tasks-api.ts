@@ -42,7 +42,7 @@ export type UpdateTaskModelType = {
   startDate: string
   deadline: string
 }
-type ResponseType<D = {}> = {
+export type ResponseType<D = {}> = {
   data: D
   resultCode: number
   messages: string[]

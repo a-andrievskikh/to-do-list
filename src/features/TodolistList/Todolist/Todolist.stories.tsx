@@ -1,8 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react'
-import { Todolist, TodolistPropsType } from './Todolist'
+import { Todolist } from './Todolist'
 import { ReduxStoreProviderDecorator } from '../../../stories/ReduxStoreProviderDecorator'
 import { useSelector } from 'react-redux'
 import { AppRootStateType } from '../../../app/store'
+import { TodolistDomainType } from '../todolists-reducer'
 
 const meta: Meta<typeof Todolist> = {
   title: 'Todolists/Todolist',
@@ -15,9 +16,11 @@ export default meta
 type Story = StoryObj<typeof Todolist>
 
 const TodolistWithRedux = () => {
-  const todolist = useSelector<AppRootStateType, TodolistPropsType>(state => state.todolists[0])
+  const todolist = useSelector<AppRootStateType, TodolistDomainType>(state => state.todolists[0])
+  const demo = true
+
   return todolist ?
-    <Todolist id={todolist.id} title={todolist.title} filter={todolist.filter} />
+    <Todolist todolist={todolist} demo={demo} />
     : <>Todolist have expired. Restart Storybook</>
 }
 

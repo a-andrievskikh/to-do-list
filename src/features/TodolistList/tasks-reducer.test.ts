@@ -1,5 +1,5 @@
-import { addTaskAC, removeTaskAC, tasksReducer, TasksStateType, updateTaskAC } from './tasks-reducer'
-import { addTodolistAC, removeTodolistAC, setTodolistsAC } from './todolists-reducer'
+import { createTaskAC, deleteTaskAC, tasksReducer, TasksStateType, updateTaskAC } from './tasks-reducer'
+import { createTodolistAC, deleteTodolistAC, setTodolistsAC } from './todolists-reducer'
 import { v1 } from 'uuid'
 import { TaskPriorities, TaskStatuses } from '../../api/tasks-api'
 
@@ -51,7 +51,7 @@ beforeEach(() => {
 
 
 test('correct task should be removed', () => {
-  const action = removeTaskAC(todolistID2, '2')
+  const action = deleteTaskAC(todolistID2, '2')
   const endState = tasksReducer(startState, action)
 
   expect(endState[todolistID1].length).toBe(3)
@@ -92,7 +92,7 @@ test('correct task should be removed', () => {
 })
 
 test('correct task should be added to correct array', () => {
-  const action = addTaskAC({
+  const action = createTaskAC({
     todoListId: todolistID2,
     id: 'id exist',
     title: 'juice',
@@ -130,7 +130,7 @@ test('title of specified task should be changed', () => {
 })
 
 test('new array should be added when new todolist is added', () => {
-  const action = addTodolistAC({
+  const action = createTodolistAC({
     id: 'new id',
     title: 'new todolist',
     order: 0,
@@ -149,7 +149,7 @@ test('new array should be added when new todolist is added', () => {
 })
 
 test('property with todolistId should be deleted', () => {
-  const action = removeTodolistAC(todolistID2)
+  const action = deleteTodolistAC(todolistID2)
   const endState = tasksReducer(startState, action)
   const keys = Object.keys(endState)
 

@@ -1,12 +1,14 @@
-import { IconButton, TextField } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import TextField from '@mui/material/TextField'
+import AddBoxOutlined from '@mui/icons-material/AddBoxOutlined'
 import { KeyboardEvent, ChangeEvent, memo, useState } from 'react'
-import { AddBoxOutlined } from '@mui/icons-material'
 
 export type ItemFormType = {
   addItem: (title: string) => void
+  disabled?: boolean
 }
 
-export const ItemForm = memo(({ addItem }: ItemFormType) => {
+export const ItemForm = memo(({ addItem, disabled = false }: ItemFormType) => {
     const [title, setTitle] = useState<string>('')
     const [isError, setIsError] = useState<boolean>(false)
 
@@ -41,9 +43,11 @@ export const ItemForm = memo(({ addItem }: ItemFormType) => {
                    value={title}
                    onChange={onChangeHandler}
                    onKeyDown={onKeyDownHandler}
+                   disabled={disabled}
         />
         <IconButton
           onClick={addNewItem}
+          disabled={disabled}
         >
           <AddBoxOutlined style={{
             width: '30px',

@@ -85,7 +85,7 @@ export const updateTodolistTC = (todolistID: string, title: string): AppThunk =>
   dispatch(setAppStatusAC('succeeded'))
 }
 
-// Types
+// Actions
 export type TodolistActionsType =
   | ReturnType<typeof deleteTodolistAC>
   | ReturnType<typeof createTodolistAC>

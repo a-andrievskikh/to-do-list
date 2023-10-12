@@ -3,18 +3,11 @@ import Checkbox from '@mui/material/Checkbox'
 import IconButton from '@mui/material/IconButton'
 import { updateTaskTC, deleteTaskTC } from '../../tasks-reducer'
 import { EditableSpan } from '../../../../components/EditableSpan/EditableSpan'
-import { ChangeEvent, useCallback } from 'react'
+import { ChangeEvent, memo, useCallback } from 'react'
 import { TaskStatuses } from '../../../../api/tasks-api'
 import { useAppDispatch } from '../../../../app/hooks'
 
-export type TaskPropsType = {
-  todolistID: string
-  taskID: string
-  title: string
-  status: TaskStatuses
-}
-
-export const Task = ({ todolistID, taskID, title, status }: TaskPropsType) => {
+export const Task = memo(({ todolistID, taskID, title, status }: TaskPropsT) => {
   const dispatch = useAppDispatch()
 
   const deleteTask = useCallback(() => {
@@ -31,15 +24,13 @@ export const Task = ({ todolistID, taskID, title, status }: TaskPropsType) => {
   }, [dispatch, todolistID, taskID])
 
   const updateTaskTitle = useCallback((taskTitle: string) => {
-    dispatch(
-      updateTaskTC(
-        todolistID, taskID, { title: taskTitle },
-      ),
-    )
+    dispatch(updateTaskTC(todolistID, taskID, { title: taskTitle }))
   }, [dispatch, todolistID, taskID])
 
+  const listItemClassName = status === TaskStatuses.Completed ? 'isDone' : ''
+
   return (
-    <li className={status === TaskStatuses.Completed ? 'isDone' : ''}
+    <li className={listItemClassName}
         key={taskID}>
       <Checkbox color="primary"
                 checked={status === TaskStatuses.Completed}
@@ -53,4 +44,12 @@ export const Task = ({ todolistID, taskID, title, status }: TaskPropsType) => {
       </IconButton>
     </li>
   )
+})
+
+// Types
+export type TaskPropsT = {
+  todolistID: string
+  taskID: string
+  title: string
+  status: TaskStatuses
 }

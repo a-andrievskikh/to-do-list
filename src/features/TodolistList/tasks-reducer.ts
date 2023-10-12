@@ -4,10 +4,10 @@ import {
   SET_TODOLISTS,
   createTodolistAC,
   deleteTodolistAC,
-  setTodolistsAC,
+  setTodolistsAC, CLEAR_DATA, clearDataAC,
 } from './todolists-reducer'
-import { TaskPriorities, tasksAPI, TaskStatuses, TaskType } from '../../api/tasks-api'
-import { AppRootStateType, AppThunk } from '../../app/store'
+import { TaskPriorities, tasksAPI, TaskStatuses, TaskT } from '../../api/tasks-api'
+import { AppRootStateT, AppThunk } from '../../app/store'
 import { setAppStatusAC } from '../../app/app-reducer'
 import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
 import { ResultCodes } from '../../api/todolists-api'
@@ -18,9 +18,9 @@ export const CREATE_TASK = 'CREATE-TASK'
 export const UPDATE_TASK = 'UPDATE-TASK'
 export const SET_TASKS = 'SET-TASKS'
 
-const initialState: TasksStateType = {}
+const initialState: TasksStateT = {}
 
-export const tasksReducer = (state: TasksStateType = initialState, action: TasksActionsType): TasksStateType => {
+export const tasksReducer = (state: TasksStateT = initialState, action: TasksActionsT): TasksStateT => {
   switch (action.type) {
     case DELETE_TASK:
       return {
@@ -48,6 +48,8 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Tasks
     case SET_TASKS: {
       return { ...state, [action.todolistID]: action.tasks }
     }
+    case CLEAR_DATA:
+      return {}
     default:
       return state
   }
@@ -55,25 +57,41 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Tasks
 
 // Actions
 export const deleteTaskAC = (todolistID: string, taskID: string) => ({ type: DELETE_TASK, todolistID, taskID } as const)
-export const createTaskAC = (task: TaskType) => ({ type: CREATE_TASK, task } as const)
-export const updateTaskAC = (todolistID: string, taskID: string, model: UpdateDomainTaskModelType) =>
+export const createTaskAC = (task: TaskT) => ({ type: CREATE_TASK, task } as const)
+export const updateTaskAC = (todolistID: string, taskID: string, model: UpdateDomainTaskModelT) =>
   ({ type: UPDATE_TASK, todolistID, taskID, model } as const)
-export const setTasksAC = (todolistID: string, tasks: TaskType[]) => {
+export const setTasksAC = (todolistID: string, tasks: TaskT[]) => {
   return { type: SET_TASKS, todolistID, tasks } as const
 }
 
 // Thunks
 export const getTasksTC = (todolistID: string): AppThunk => async dispatch => {
   dispatch(setAppStatusAC('loading'))
-  const res = await tasksAPI.getTasks(todolistID)
-  dispatch(setTasksAC(todolistID, res.data.items))
-  dispatch(setAppStatusAC('succeeded'))
+  try {
+    const res = await tasksAPI.getTasks(todolistID)
+    dispatch(setTasksAC(todolistID, res.data.items))
+    dispatch(setAppStatusAC('succeeded'))
+  } catch (e) {
+    if (axios.isAxiosError<ErrorType>(e)) {
+      handleServerNetworkError(dispatch, e.message)
+    } else {
+      handleServerNetworkError(dispatch, (e as Error).message)
+    }
+  }
 }
 export const deleteTaskTC = (todolistID: string, taskID: string): AppThunk => async dispatch => {
   dispatch(setAppStatusAC('loading'))
-  await tasksAPI.deleteTask(todolistID, taskID)
-  dispatch(deleteTaskAC(todolistID, taskID))
-  dispatch(setAppStatusAC('succeeded'))
+  try {
+    await tasksAPI.deleteTask(todolistID, taskID)
+    dispatch(deleteTaskAC(todolistID, taskID))
+    dispatch(setAppStatusAC('succeeded'))
+  } catch (e) {
+    if (axios.isAxiosError<ErrorType>(e)) {
+      handleServerNetworkError(dispatch, e.message)
+    } else {
+      handleServerNetworkError(dispatch, (e as Error).message)
+    }
+  }
 }
 export const createTaskTC = (todolistID: string, title: string): AppThunk => async dispatch => {
   dispatch(setAppStatusAC('loading'))
@@ -93,8 +111,8 @@ export const createTaskTC = (todolistID: string, title: string): AppThunk => asy
     }
   }
 }
-export const updateTaskTC = (todolistID: string, taskID: string, model: UpdateDomainTaskModelType): AppThunk => {
-  return async (dispatch, getState: () => AppRootStateType) => {
+export const updateTaskTC = (todolistID: string, taskID: string, model: UpdateDomainTaskModelT): AppThunk => {
+  return async (dispatch, getState: () => AppRootStateT) => {
     dispatch(setAppStatusAC('loading'))
     const task = getState().tasks[todolistID].find(t => t.id === taskID)
     if (!task) {
@@ -117,14 +135,18 @@ export const updateTaskTC = (todolistID: string, taskID: string, model: UpdateDo
       } else {
         handleServerAppError(dispatch, res.data)
       }
-    } catch (e: any) {
-      handleServerNetworkError(dispatch, e)
+    } catch (e) {
+      if (axios.isAxiosError<ErrorType>(e)) {
+        handleServerNetworkError(dispatch, e.message)
+      } else {
+        handleServerNetworkError(dispatch, (e as Error).message)
+      }
     }
   }
 }
 
 // Types
-export type TasksActionsType =
+export type TasksActionsT =
   | ReturnType<typeof setTasksAC>
   | ReturnType<typeof deleteTaskAC>
   | ReturnType<typeof createTaskAC>
@@ -132,12 +154,13 @@ export type TasksActionsType =
   | ReturnType<typeof createTodolistAC>
   | ReturnType<typeof deleteTodolistAC>
   | ReturnType<typeof setTodolistsAC>
+  | ReturnType<typeof clearDataAC>
 
-export type TasksStateType = {
-  [key: string]: TaskType[]
+export type TasksStateT = {
+  [key: string]: TaskT[]
 }
 
-type UpdateDomainTaskModelType = {
+type UpdateDomainTaskModelT = {
   title?: string
   description?: string
   status?: TaskStatuses

@@ -1,32 +1,24 @@
-import { memo, useCallback, useEffect } from 'react'
-import { createTaskTC, getTasksTC } from '../tasks-reducer'
+import { memo, useCallback } from 'react'
+import { createTaskTC } from '../tasks-reducer'
 import { EditableSpan } from '../../../components/EditableSpan/EditableSpan'
 import { ItemForm } from '../../../components/ItemForm/ItemForm'
 import Button from '@mui/material/Button'
 import {
-  updateTodolistFilterAC, updateTodolistTC,
-  FilterType,
-  deleteTodolistTC, TodolistDomainType,
+  deleteTodolistTC,
+  FilterT,
+  TodolistDomainT,
+  updateTodolistFilterAC,
+  updateTodolistTC,
 } from '../todolists-reducer'
 import { Task } from './Task/Task'
-import { TaskStatuses, TaskType } from '../../../api/tasks-api'
+import { TaskStatuses, TaskT } from '../../../api/tasks-api'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 
-export type TodolistPropsType = {
-  todolist: TodolistDomainType
-  demo?: boolean
-}
-
-export const Todolist = memo(({ todolist, demo = false }: TodolistPropsType) => {
+export const Todolist = memo(({ todolist, demo = false }: TodolistPropsT) => {
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-      if (demo) return
-      dispatch(getTasksTC(todolist.id))
-    }, [dispatch, todolist.id, demo])
-
     const tasks =
-      useAppSelector<TaskType[]>(s =>
+      useAppSelector<TaskT[]>(s =>
         todolist.filter === 'active' ? s.tasks[todolist.id].filter(t => t.status === TaskStatuses.New)
           : todolist.filter === 'completed' ? s.tasks[todolist.id].filter(t => t.status === TaskStatuses.Completed)
             : s.tasks[todolist.id],
@@ -35,12 +27,15 @@ export const Todolist = memo(({ todolist, demo = false }: TodolistPropsType) => 
     const addItem = useCallback((itemTitle: string) => {
       dispatch(createTaskTC(todolist.id, itemTitle))
     }, [dispatch, todolist.id])
+
     const updateTodolistTitle = useCallback((newTitle: string) => {
       dispatch(updateTodolistTC(todolist.id, newTitle))
     }, [dispatch, todolist.id])
-    const updateTodolistFilter = useCallback((filterValue: FilterType) => {
+
+    const updateTodolistFilter = useCallback((filterValue: FilterT) => {
       dispatch(updateTodolistFilterAC(todolist.id, filterValue))
     }, [dispatch, todolist.id])
+
     const deleteTodolist = useCallback((todolistID: string) => {
       dispatch(deleteTodolistTC(todolistID))
     }, [dispatch])
@@ -89,4 +84,10 @@ export const Todolist = memo(({ todolist, demo = false }: TodolistPropsType) => 
     )
   },
 )
+
+// Types
+export type TodolistPropsT = {
+  todolist: TodolistDomainT
+  demo?: boolean
+}
 

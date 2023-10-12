@@ -1,10 +1,10 @@
 import { setAppErrorAC, setAppStatusAC } from '../app/app-reducer'
-import { ResponseType } from '../api/tasks-api'
 import { Dispatch } from 'redux'
+import { ResponseT } from '../api/common-types'
 
 const errorText = 'Some error occurred'
 
-export const handleServerAppError = <D>(dispatch: Dispatch<ErrorUtilsDispatchType>, data: ResponseType<D>) => {
+export const handleServerAppError = <D>(dispatch: Dispatch<ErrorUtilsDispatchT>, data: ResponseT<D>) => {
   if (data.messages.length) {
     dispatch(setAppErrorAC(data.messages[0]))
   } else {
@@ -13,12 +13,12 @@ export const handleServerAppError = <D>(dispatch: Dispatch<ErrorUtilsDispatchTyp
   dispatch(setAppStatusAC('failed'))
 }
 
-export const handleServerNetworkError = (dispatch: Dispatch<ErrorUtilsDispatchType>, error: string) => {
+export const handleServerNetworkError = (dispatch: Dispatch<ErrorUtilsDispatchT>, error: string) => {
   dispatch(setAppErrorAC(error ? error : errorText))
   dispatch(setAppStatusAC('failed'))
 }
 
 // Types
-type ErrorUtilsDispatchType =
+type ErrorUtilsDispatchT =
   | ReturnType<typeof setAppErrorAC>
   | ReturnType<typeof setAppStatusAC>

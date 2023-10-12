@@ -3,12 +3,7 @@ import TextField from '@mui/material/TextField'
 import AddBoxOutlined from '@mui/icons-material/AddBoxOutlined'
 import { KeyboardEvent, ChangeEvent, memo, useState } from 'react'
 
-export type ItemFormType = {
-  addItem: (title: string) => void
-  disabled?: boolean
-}
-
-export const ItemForm = memo(({ addItem, disabled = false }: ItemFormType) => {
+export const ItemForm = memo(({ addItem, disabled = false }: ItemFormT) => {
     const [title, setTitle] = useState<string>('')
     const [isError, setIsError] = useState<boolean>(false)
 
@@ -61,3 +56,9 @@ export const ItemForm = memo(({ addItem, disabled = false }: ItemFormType) => {
     )
   },
 )
+
+// Types
+export type ItemFormT = {
+  addItem: (title: string) => void
+  disabled?: boolean
+}

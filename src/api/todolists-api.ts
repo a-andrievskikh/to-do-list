@@ -1,4 +1,5 @@
 import { instance } from './basic'
+import { ResponseT } from './common-types'
 
 // API
 export const todolistsAPI = {
@@ -6,13 +7,13 @@ export const todolistsAPI = {
     return instance.get<TodolistType[]>('todo-lists/')
   },
   createTodolist(title: string) {
-    return instance.post<ResponseType<{ item: TodolistType }>>('todo-lists/', { title })
+    return instance.post<ResponseT<{ item: TodolistType }>>('todo-lists/', { title })
   },
   deleteTodolist(todolistID: string) {
-    return instance.delete<ResponseType>(`todo-lists/${todolistID}`)
+    return instance.delete<ResponseT>(`todo-lists/${todolistID}`)
   },
   updateTodolistTitle(todolistID: string, title: string) {
-    return instance.put<ResponseType>(`todo-lists/${todolistID}`, { title })
+    return instance.put<ResponseT>(`todo-lists/${todolistID}`, { title })
   },
 }
 
@@ -22,11 +23,6 @@ export type TodolistType = {
   title: string
   addedDate: string
   order: number
-}
-type ResponseType<D = {}> = {
-  data: D
-  resultCode: number
-  messages: string[]
 }
 
 export enum ResultCodes {

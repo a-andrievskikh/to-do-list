@@ -1,23 +1,24 @@
 import { instance } from './basic'
+import { ResponseT } from './common-types'
 
 // API
 export const tasksAPI = {
   getTasks(todolistID: string) {
-    return instance.get<GetTasksResponseType>(`todo-lists/${todolistID}/tasks`)
+    return instance.get<GetTasksResponseT>(`todo-lists/${todolistID}/tasks`)
   },
   createTask(todolistID: string, taskTitle: string) {
-    return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistID}/tasks`, { title: taskTitle })
+    return instance.post<ResponseT<{ item: TaskT }>>(`todo-lists/${todolistID}/tasks`, { title: taskTitle })
   },
   deleteTask(todolistID: string, taskID: string) {
-    return instance.delete<ResponseType>(`todo-lists/${todolistID}/tasks/${taskID}`)
+    return instance.delete<ResponseT>(`todo-lists/${todolistID}/tasks/${taskID}`)
   },
-  updateTask(todolistID: string, taskID: string, model: UpdateTaskModelType) {
-    return instance.put<ResponseType>(`todo-lists/${todolistID}/tasks/${taskID}`, model)
+  updateTask(todolistID: string, taskID: string, model: UpdateTaskModelT) {
+    return instance.put<ResponseT>(`todo-lists/${todolistID}/tasks/${taskID}`, model)
   },
 }
 
 // Types
-export type TaskType = {
+export type TaskT = {
   todoListId: string
   id: string
   title: string
@@ -29,23 +30,18 @@ export type TaskType = {
   order: number
   addedDate: string
 }
-type GetTasksResponseType = {
+type GetTasksResponseT = {
   totalCount: number
   error: string | null
-  items: TaskType[]
+  items: TaskT[]
 }
-export type UpdateTaskModelType = {
+export type UpdateTaskModelT = {
   title: string
   description: string
   status: TaskStatuses
   priority: TaskPriorities
   startDate: string
   deadline: string
-}
-export type ResponseType<D = {}> = {
-  data: D
-  resultCode: number
-  messages: string[]
 }
 
 export enum TaskStatuses {

@@ -1,11 +1,11 @@
-import { createTaskAC, deleteTaskAC, tasksReducer, TasksStateType, updateTaskAC } from './tasks-reducer'
+import { createTaskAC, deleteTaskAC, tasksReducer, TasksStateT, updateTaskAC } from './tasks-reducer'
 import { createTodolistAC, deleteTodolistAC, setTodolistsAC } from './todolists-reducer'
 import { v1 } from 'uuid'
 import { TaskPriorities, TaskStatuses } from '../../api/tasks-api'
 
 let todolistID1: string
 let todolistID2: string
-let startState: TasksStateType
+let startState: TasksStateT
 
 beforeEach(() => {
   todolistID1 = v1()

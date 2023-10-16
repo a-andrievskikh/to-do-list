@@ -1,9 +1,9 @@
 import { v1 } from 'uuid'
-import { appReducer, AppStateType, setAppErrorAC, setAppStatusAC } from './app-reducer'
+import { appReducer, AppStateT, setAppErrorAC, setAppStatusAC } from './app-reducer'
 
 let todolistID1: string
 let todolistID2: string
-let startState: AppStateType
+let startState: AppStateT
 
 beforeEach(() => {
   todolistID1 = v1()
@@ -12,6 +12,7 @@ beforeEach(() => {
   startState = {
     status: 'idle',
     error: null,
+    isInitialized: false,
   }
 })
 
@@ -25,6 +26,6 @@ test('correct error message should be set', () => {
 test('correct status message should be set', () => {
   const endState = appReducer(startState, setAppStatusAC('succeeded'))
 
-  expect(endState.status).toBe('succeed')
+  expect(endState.status).toBe('succeeded')
   expect(endState.error).toBe(null)
 })
